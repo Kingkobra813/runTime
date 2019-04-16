@@ -1,9 +1,12 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { createStackNavigator, createAppContainer } from "react-navigation";
+import OptionScreen from "./screens/OptionScreen";
 
-export default class App extends React.Component {
+class App extends Component {
   getStartedPress = () => {
-    console.log("pressed");
+    const { navigate } = this.props.navigation;
+    navigate("OptionScreen");
   };
 
   render() {
@@ -26,3 +29,12 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+const MainNavigator = createStackNavigator({
+  Main: { screen: App },
+  OptionScreen: { screen: OptionScreen }
+});
+
+const AppNavigator = createAppContainer(MainNavigator);
+
+export default AppNavigator;
