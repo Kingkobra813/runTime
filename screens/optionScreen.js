@@ -12,8 +12,8 @@ class OptionScreen extends Component {
       isPressed: false
     };
   }
-  handleStartRunning = () => {
-    console.log("startRunning");
+  handleStartRunning = value => {
+    console.log("startRunning", value);
   };
 
   render() {
@@ -22,10 +22,13 @@ class OptionScreen extends Component {
     return (
       <View>
         <Text>Running Time</Text>
-        <Dropdown label="Running Time" data={runningTime} />
+        <Dropdown
+          label="Running Time"
+          data={runningTime}
+          onChangeText={value => this.handleStartRunning(value)}
+        />
         <Text>Walking Time</Text>
         <Dropdown label="Walking Time" data={walkingTime} />
-        <Button title="Start running" onPress={this.handleStartRunning} />
         <TimerCountdown
           initialMilliseconds={this.state.isPressed ? 1000 * 60 : 1000 * 0}
           onTick={milliseconds => console.log("tick", milliseconds)}
@@ -47,7 +50,14 @@ class OptionScreen extends Component {
         <Button
           title={`${this.state.isPressed ? "Running" : "Start running"}`}
           onPress={() => {
+            console.log(this.startTime);
             this.setState({ isPressed: true });
+          }}
+        />
+        <Button
+          title="Stop"
+          onPress={() => {
+            this.setState({ isPressed: false });
           }}
         />
       </View>
