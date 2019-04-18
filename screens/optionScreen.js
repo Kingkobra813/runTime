@@ -8,9 +8,11 @@ class OptionScreen extends Component {
     super(props);
 
     this.state = {
+      runCount: 0,
       runTime: 0,
       walkTime: 0,
-      isPressed: false
+      runIsPressed: false,
+      walkIsPressed: false
     };
   }
   handleStartRunning = value => {
@@ -37,13 +39,45 @@ class OptionScreen extends Component {
           onChangeText={value => this.handleStartRunning(value)}
         />
         <Text>Walking Time</Text>
-        <Dropdown label="Walking Time" data={walkingTime} />
+        <Dropdown
+          label="Walking Time"
+          data={walkingTime}
+          onChangeText={value => this.handleStartWalking(value)}
+        />
         <TimerCountdown
           initialMilliseconds={
-            this.state.isPressed ? this.state.runTime : 1000 * 0
+            this.state.runIsPressed ? this.state.runTime : 1000 * 0
           }
           onTick={milliseconds => console.log("tick", milliseconds)}
-          onExpire={() => console.log("complete")}
+          onExpire={() =>
+            this.setState({ walkIsPressed: true, runIsPressed: false })
+          }
+          formatMilliseconds={milliseconds => {
+            const remainingSec = Math.round(milliseconds / 1000);
+            const seconds = parseInt((remainingSec % 60).toString(), 10);
+            const minutes = parseInt(((remainingSec / 60) % 60).toString(), 10);
+            const hours = parseInt((remainingSec / 3600).toString(), 10);
+            const s = seconds < 10 ? "0" + seconds : seconds;
+            const m = minutes < 10 ? "0" + minutes : minutes;
+            let h = hours < 10 ? "0" + hours : hours;
+            h = h === "00" ? "" : h + ":";
+            return h + m + ":" + s;
+          }}
+          allowFontScaling={true}
+          style={{ fontSize: 20 }}
+        />
+        <TimerCountdown
+          initialMilliseconds={
+            this.state.walkIsPressed ? this.state.walkTime : 1000 * 0
+          }
+          onTick={milliseconds => console.log("tick", milliseconds)}
+          onExpire={() =>
+            this.setState({
+              runIsPressed: true,
+              walkIsPressed: false,
+              runCount: +1
+            })
+          }
           formatMilliseconds={milliseconds => {
             const remainingSec = Math.round(milliseconds / 1000);
             const seconds = parseInt((remainingSec % 60).toString(), 10);
@@ -59,16 +93,15 @@ class OptionScreen extends Component {
           style={{ fontSize: 20 }}
         />
         <Button
-          title={`${this.state.isPressed ? "Running" : "Start running"}`}
+          title={`${this.state.runIsPressed ? "Running" : "Start running"}`}
           onPress={() => {
-            console.log("button runTime", this.state.runTime);
-            this.setState({ isPressed: true });
+            this.setState({ runIsPressed: true });
           }}
         />
         <Button
           title="Stop"
           onPress={() => {
-            this.setState({ isPressed: false });
+            this.setState({ runIsPressed: false, walkIsPressed: false });
           }}
         />
       </View>
