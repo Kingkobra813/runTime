@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, Image } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import OptionScreen from "./screens/OptionScreen";
+import Runningguy from "./Images/Runningguy.png";
 
 class App extends Component {
   getStartedPress = () => {
@@ -13,6 +14,7 @@ class App extends Component {
     return (
       <View style={styles.container}>
         <Text>runTime!</Text>
+        <Image source={require("./Images/RunningGirl.png")} />
         <View>
           <Button onPress={this.getStartedPress} title="Get Started" />
         </View>
